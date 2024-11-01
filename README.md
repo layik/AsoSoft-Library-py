@@ -5,12 +5,12 @@ AsoSoft Library is originally written in C# and this library is the Python port.
 - **Normalizer**: normalizes the Kurdish text and punctuation marks, unifies numerals, replaces Html Entities, extracts and replaces URLs and emails, and more.
 - **Numeral Converter**: converts any type of numbers into Kurdish words.
 - **Sort**: Sorts a list in correct Kurdish alphabet order.
-- **Poem Meter Classifier**: Classifies the meter of the input Kurdish poem 
+- **Poem Meter Classifier**: Classifies the meter of the input Kurdish poem
 
 ## How to use?
-- **Python version**: Python 3.11+ 
+- **Python version**: Python 3.11+
 - **Install package using pip**: [pip install asosoft](https://pypi.org/project/asosoft/)
-- **Import package in your py file**: 
+- **Import package in your py file**:
 ```python
 import asosoft
 ```
@@ -20,7 +20,7 @@ AsoSoft Library is developed and maintained by Aso Mahmudi.
 AsoSoft Library is written in C# (.NET 6).
 
 ## Grapheme-to-Phoneme (G2P) converter and Transliteration
-This function is based on the study "[Automated Grapheme-to-Phoneme Conversion for Central Kurdish based on Optimality Theory](https://www.sciencedirect.com/science/article/abs/pii/S0885230821000292)". 
+This function is based on the study "[Automated Grapheme-to-Phoneme Conversion for Central Kurdish based on Optimality Theory](https://www.sciencedirect.com/science/article/abs/pii/S0885230821000292)".
 
 ### Kurdish G2P converter
 Converts Central Kurdish text in standard Arabic script into **syllabified phonemic** Latin script (i.e. graphemes to phonems)
@@ -44,7 +44,7 @@ gîrodey xałî řeşte; gwêt le neẍmey tuyûre?
 
 Arabic script into the Latin script suggested by Dr. Feryad Fazil Omar:
 ```python
->>> print(asosoft.Ar2LaF("گیرۆدەی خاڵی ڕەشتە؛ گوێت لە نەغمەی تویوورە؟"))
+>>> print(asosoft.Ar2LaFeryad("گیرۆدەی خاڵی ڕەشتە؛ گوێت لە نەغمەی تویوورە؟"))
 gîrodey xaḻî ṟeşte; gwêt le nex̱mey tuyûre?
 ```
 
@@ -86,7 +86,7 @@ The normalization task in this function:
  - Standardizing and removing duplicated or unnecessary Zero-Width characters
  - removing unnecessary Tatweels (U+0640)
 - only for Central Kurdish:
-  - standardizing Kurdish characters: ە, هـ, ی, and ک 
+  - standardizing Kurdish characters: ە, هـ, ی, and ک
   - correcting miss-converted characters from non-Unicode fonts
   - replacing word-initial ر with ڕ
 
@@ -128,7 +128,7 @@ or the complete overloading:
 بڵێین و بگەڕێین بۆ هەڵاڵەی سێیەمی فەلسەفە
 ```
 ### NormalizePunctuations
-`NormalizePunctuations` corrects spaces before and after of the punctuations. When `seprateAllPunctuations` is true, 
+`NormalizePunctuations` corrects spaces before and after of the punctuations. When `seprateAllPunctuations` is true,
 ```python
 >>> print(asosoft.NormalizePunctuations("دەقی«کوردی » و ڕێنووس ،((خاڵبەندی )) چۆنە ؟", false))
 دەقی «کوردی» و ڕێنووس، «خاڵبەندی» چۆنە؟

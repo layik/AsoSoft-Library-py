@@ -15,9 +15,10 @@ transliteration_replaces = {
         "\u201D", "»",
         rf"([0-9])([\'’-])([aeiouêîûéú])", r"\1\3",     # (e.g. 1990'an 5'ê)
         "ʔ", "",    # glottal stop
-        # there is an issue here it should
-        # convert ew to ئەو
-        rf"(^|\s)([aeiouêîûéú])", r"\1ئ\2",  # insert initial hamza at start or after a space        # this does not do the job
+        # there is an issue here it should convert ew to ئەو
+        # but also helebestin to هەڵئەبەستن
+        rf"(^|\s)([aeiouêîûéú])", r"\1ئ\2",  # insert initial hamza at start or after a space
+        # this does not do the job
         # rf"(^|[^{latin_letters}0-9\"’])([aeiouêîûéú])", r"\1ئ\2", #insert initial hamza
         rf"([aeouêîûéú])([aeiouêîûéú])", r"\1ئ\2",     #insert hamza between adjacent vowels
         rf"(ئ)([uû])([^{latin_letters}0-9])", r"و\3",     #omit the inserted hamza for "û" (=and)
@@ -61,7 +62,7 @@ transliteration_replaces = {
         "ẍ", "غ",
         "z", "ز",
         rf"ه($|[^ابپتجچحخدرڕزژسشصعغفڤقکگلڵمنوۆهەیێ])", r"هـ\1",  # word-final h
-        "\"|’", "ئ", # need checking, not sure "ع" or "ئ"
+        # "\"|’", "ئ", # need checking, not sure "ع" or "ئ"
         "ʿ", "ع",
         "\\u003F", "؟", #question mark
         ",", "،",  #comma

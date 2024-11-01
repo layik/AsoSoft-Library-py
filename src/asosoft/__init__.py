@@ -9,13 +9,13 @@ from .Number2Word import Number2Word
 
 from .Transliteration import (
     Ar2La,
-    Ar2LaF,
+    Ar2LaFeryad,
     Ar2LaSimple,
     La2Ar,
     LaDigraph2Ar,
     Phonemes2ASCII,
     Phonemes2Hawar,
-    Phonemes2IPA    
+    Phonemes2IPA
 )
 
 from .Normalize import (
@@ -27,7 +27,7 @@ from .Normalize import (
     ReplaceUrlEmail,
     Char2CharReplacment,
     Word2WordReplacement,
-    UnifyNumerals,    
+    UnifyNumerals,
     AliK2Unicode,
     AliWeb2Unicode,
     Dylan2Unicode,
