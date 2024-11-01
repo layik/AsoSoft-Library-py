@@ -109,6 +109,7 @@ def Ar2LaFeryad(text):
     text = text.replace("ẍ", "x̱")
     text = text.replace("ƹ", "‛")
     text = text.replace("ʔ", "")
+    text = _capitalize_sentences(text)
     return text
 
 path = os.path.dirname(__file__)
@@ -130,7 +131,8 @@ def Phonemes2IPA(text):
 def Phonemes2Hawar(text):
     text = text.replace("ˈ", "")
     text = re.sub(r'(^ʔ|(?<=\W)ʔ)', '', text)
-    text = re.sub(r'[ʔƹ]', '’', text)
+    # potential issue for converting بەئارام -> be’aram
+    text = re.sub(r'[ʔƹ]', '', text)
     return text
 
 # Converts the output of the G2P into Jira's ASCII format (e.g. ˈdeˈçim→D▪A▪CH▪M)
@@ -144,3 +146,10 @@ def Phonemes2ASCII(text):
         item = Phoneme2Ascii[i].strip().split(',')
         text = re.sub(item[0], item[1] + '▪', text)
     return text
+
+# Function to capitalize the first letter of each sentence
+def _capitalize_sentences(text):
+    # Capitalize the start of the text
+    text = text.capitalize()
+    # Find occurrences of punctuation followed by a space or newline, and a lowercase letter
+    return re.sub(r'([.!?\n]\s*)(\w)', lambda m: m.group(1) + m.group(2).upper(), text)

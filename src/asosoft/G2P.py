@@ -30,10 +30,10 @@ def _G2PNormalize(text):
         "دٚ", "ڎ",
         "گٚ", "ڴ",
         r"(^|\s)چ بکە", r"\1چبکە",
-        "َ", "ە",  # فتحه 
-        "ِ", "ی",  # کسره 
-        "ُ", "و",  # ضمه 
-        "ء", "ئ",  # Hamza   
+        "َ", "ە",  # فتحه
+        "ِ", "ی",  # کسره
+        "ُ", "و",  # ضمه
+        "ء", "ئ",  # Hamza
         "أ", "ئە",
         "إ", "ئی",
         "آ", "ئا",
@@ -64,7 +64,7 @@ def _load_replaces():
         next(reader)  # Skip the first row
         for row in reader:
             _G2PExceptions[row[0]] = row[1]
-            
+
     with open(os.path.join(_path, "resources/G2PCertain.csv"), 'r', encoding="utf-8", newline='\n') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)  # Skip the first row
@@ -85,6 +85,9 @@ def _Generator(gr):
 
     # Converting certain characters
     for key, value in _G2PCertain.items():
+        # Bypass any rule containing "$1i" if it causes issues with standalone letters
+        if "$1i" in value and len(gr) == 1:
+            continue  # Skip adding $1i for standalone single letters
         gr = re.sub(key, value, gr)
 
     # Uncertainty in "و" and "ی"
@@ -183,7 +186,7 @@ def _Syllabification(Candidates):
             Candidates.append(re.sub(r"([aeêouûiîȯė][^aeêouûiîȯė]?)ˈ([^aeêouûiîȯėwy])([wy])", r"\1\2ˈ\3", Candidates[i]))
     return Candidates
 
-# Sonority Sequencing Principle in EVAL needs phoneme ranking 
+# Sonority Sequencing Principle in EVAL needs phoneme ranking
 def _SonorityIndex(ch):
     c = str(ch)
     if re.search(r"[wy]", c):  # Approximant
@@ -199,7 +202,7 @@ def _SonorityIndex(ch):
     else:  # Stop
         return 1
 
-     
+
 # EVAL: specifies a penalty number for each syllabified candidate
 def _EVAL(Candidates):
     output = {}
@@ -230,10 +233,10 @@ def _EVAL(Candidates):
 
             P += candidate.count("kˈr") * 3
 
-            #  ('kurd'si'tan => 'kur'dis'tan) 
+            #  ('kurd'si'tan => 'kur'dis'tan)
             P += len(re.findall(r"[^aeêouûiîȯėˈ]ˈsiˈtaˈ?n", candidate)) * 3
 
-            #"(kewt|newt|ḧewt|rext|sext|dest|pest|řast|mest|pişt|wîst|hest|bîst|heşt|şest)"                    
+            #"(kewt|newt|ḧewt|rext|sext|dest|pest|řast|mest|pişt|wîst|hest|bîst|heşt|şest)"
             # suffix /it/ and /im/ ('sert => 'se'rit) ('xewt !! 'xe'wit / 'xewt)
             if not re.search(r"(rift|neft|kurt|girt|xirt|germ|term|port)", candidate):
                 P += len(re.findall(r"[aeêouûiîȯė]([^aeêouûiîyȯėˈ]m|[^aeêouûiîysşxwˈ]t)$", candidate)) * 3
@@ -275,26 +278,26 @@ def _EVAL(Candidates):
             # ('xawn => 'xa'win) ('pyawn => pya'win)
             P += len(re.findall(r"[aêoûî][w][^aeêouûiîˈ]", candidate)) * 5
 
-            # 
+            #
             P += len(re.findall(r"uw(ˈ|$)", candidate)) * 5
             #===========================
 
             # ('lab'ri'di'nî => 'la'bir'di'nî)
             P += len(re.findall(r"[aeêouûiî][^aeêouûiîˈ]ˈriˈ", candidate)) * 5
-            
+
             # 'ser'nic, 'dek'rid, gir'fit => 'se'rinc, 'de'kird, 'gi'rift  (NOT gir'tin)
             pat = re.search(r"([^aeêouûiîˈ])ˈ([^aeêouûiîˈ])i([^aeêouûiîˈ])", candidate)
             if pat:
                 C = re.sub("[iˈ]", "", pat.group())
                 if _SonorityIndex(C[1]) > _SonorityIndex(C[2]):
                     P += 3
-            # ('sern'cê => 'se'rin'cê) 
+            # ('sern'cê => 'se'rin'cê)
             pat = re.search(r"([^aeêouûiîˈ])([^aeêouûiîˈ])ˈ([^aeêouûiîˈ])", candidate)
             if pat:
                 C = re.sub("[iˈ]", "", pat.group())
                 if _SonorityIndex(C[0]) > _SonorityIndex(C[1]):
                     P += 3
-            # ('ser'ni'cê => 'se'rin'cê) 
+            # ('ser'ni'cê => 'se'rin'cê)
             pat = re.search(r"([^aeêouûiîˈ])ˈ([^aeêouûiîˈ])iˈ([^aeêouûiîˈ])", candidate)
             if pat:
                 C = re.sub("[iˈ]", "", pat.group())
@@ -314,14 +317,14 @@ def _EVAL(Candidates):
 # chooses the best candidates for the word
 def _Evaluator(gr, Candidates):
     Output = []
-    evaluatedCandidates = _EVAL(Candidates) 
+    evaluatedCandidates = _EVAL(Candidates)
     if len(evaluatedCandidates) > 0:
         LowestPenalt = list(evaluatedCandidates.values())[0]
         for key, value in evaluatedCandidates.items():
             if value < LowestPenalt + 5:
                 Output.append(key)
     return gr if len(Output) == 0 else '¶'.join(Output)
-   
+
 def _WordG2P(gr, SingleOutputPerWord):
     # Check history for speed up
     if gr not in _History:
@@ -360,7 +363,7 @@ def KurdishG2P(text, convertNumbersToWord=False, backMergeConjunction=True, sing
         # ('ser + û => 'se'rû)
         # ('sard + û => 'sar'dû)
         # ('min + û => 'mi'nû)
-        # ('bi'gir + û => 'bi'gi'rû) 
+        # ('bi'gir + û => 'bi'gi'rû)
         # ('gir'tin + û => 'gir'ti'nû)
         output = re.sub(r"([^aeêouûiî]) و", r"ˈ\1û", output)
         # if conjunction makes candidates the same  (e.g ˈbîsˈtû¶ˈbîsˈtû)
