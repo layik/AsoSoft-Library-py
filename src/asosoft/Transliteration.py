@@ -106,9 +106,11 @@ def Ar2LaFeryad(text):
     text = text.replace("ř", "ṟ")
     text = text.replace("ł", "ḻ")
     text = text.replace("ħ", "ẖ")
+    text = text.replace("ḧ", "ẖ")
     text = text.replace("ẍ", "x̱")
     text = text.replace("ƹ", "‛")
     text = text.replace("ʔ", "")
+    text = text.replace("uw", "û")
     text = _capitalize_sentences(text)
     return text
 
@@ -132,7 +134,7 @@ def Phonemes2Hawar(text):
     text = text.replace("ˈ", "")
     text = re.sub(r'(^ʔ|(?<=\W)ʔ)', '', text)
     # potential issue for converting بەئارام -> be’aram
-    text = re.sub(r'[ʔƹ]', '', text)
+    text = re.sub(r'[ʔƹ]', 'ʿ', text)
     return text
 
 # Converts the output of the G2P into Jira's ASCII format (e.g. ˈdeˈçim→D▪A▪CH▪M)

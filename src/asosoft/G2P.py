@@ -178,7 +178,11 @@ def _Syllabification(Candidates):
     cCount = len(Candidates)
     for i in range(cCount):
         # Onset C(C)V
-        Candidates[i] = re.sub(r"([^aeêouûiîȯėwy][wy]|[^aeêouûiîȯė])([aeêouûiîȯė])", r"ˈ\1\2", Candidates[i])
+        # Dr Feryad adds i in ژیان => jiyan
+        # also for خوا and دوا => xiwa and diwa
+        Candidates[i] = re.sub(r"([^aeêouûiîȯėwy]|[^aeêouûiîȯė])([aeêouûiîȯė])", r"ˈ\1\2", Candidates[i])
+        # original line (removed wy from the first group)
+        # Candidates[i] = re.sub(r"([^aeêouûiîȯėwy][wy]|[^aeêouûiîȯė])([aeêouûiîȯė])", r"ˈ\1\2", Candidates[i])
         # if no ˈ at beginig  (grˈtin => ˈgrˈtin)
         Candidates[i] = re.sub(r"^([^ˈ])", r"ˈ\1", Candidates[i])
         # add candidate ( 'be'sye => + 'bes'ye)
