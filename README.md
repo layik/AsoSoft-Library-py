@@ -16,8 +16,12 @@ import asosoft
 ```
 
 ## Development
-AsoSoft Library is developed and maintained by Aso Mahmudi.
-AsoSoft Library is written in C# (.NET 6).
+AsoSoft Library is developed and maintained by Aso Mahmudi and others.
+
+## Colab
+You can use the following Colab:
+https://colab.research.google.com/drive/1ImQAr05ftmEeuPn1oj2s4wqyVYys6oIP?usp=sharing
+
 
 ## Grapheme-to-Phoneme (G2P) converter and Transliteration
 This function is based on the study "[Automated Grapheme-to-Phoneme Conversion for Central Kurdish based on Optimality Theory](https://www.sciencedirect.com/science/article/abs/pii/S0885230821000292)".
